@@ -68,10 +68,7 @@ class MarkManager:
 
     def print_dirs(self) -> None:
         for index, directory in enumerate(self):
-            print(
-                f"{COLOR1 if index % 2 else COLOR2}"
-                f"{index}\t{directory}{RESET}"
-            )
+            print(f"{COLOR1 if index % 2 else COLOR2}" f"{index}\t{directory}{RESET}")
 
     def clear(self) -> None:
         try:
@@ -84,6 +81,14 @@ class MarkManager:
 
 
 def main():
+    USAGE = """
+Usage:
+  mark add [DIR]       Add current or specified directory
+  mark list            Show bookmarks
+  mark go <NUM>        Print path to change directory to
+  mark remove <NUM>    Remove bookmark by number
+  mark clear           Delete all bookmarks
+"""
     mark = MarkManager()
 
     cmd = sys.argv[1] if len(sys.argv) > 1 else "list"
@@ -112,7 +117,7 @@ def main():
         mark.clear()
         return
 
-    print("Unknown command:", cmd)
+    print(USAGE)
 
 
 if __name__ == "__main__":
