@@ -76,7 +76,7 @@ class MarkManager:
         except PermissionError as e:
             print(e)
 
-    def __iter__(self) -> Iterator:
+    def __iter__(self) -> Iterator[str]:
         return iter(self._dirs)
 
 
