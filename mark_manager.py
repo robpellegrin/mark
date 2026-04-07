@@ -58,8 +58,9 @@ class MarkManager:
 
         try:
             self._dirs.pop(idx)
-        except IndexError as e:
-            raise ValueError(f"Index out of range: {index}") from e
+        except IndexError:
+            print(f"Index out of range: {index}")
+            return
 
         self._save()
 
