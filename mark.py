@@ -1,26 +1,27 @@
 """
-@file    mark.py
+@file    mark_manager.py
 @author  Rob Pellegrin
 @date    02-17-2026
 
-@updated 02-23-2026
+@updated 04-06-2026
 
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
 from typing import Iterator
 
-# ANSI colors for alternating lines
-COLOR1 = "\033[94m"  # bright blue
-COLOR2 = "\033[96m"  # bright cyan
-RESET = "\033[0m"
-
 
 class MarkManager:
     _FILE_PATH = Path.home() / ".marks"
     _dirs: list[str]
+
+    # ANSI colors for alternating lines
+    COLOR1 = "\033[94m"  # bright blue
+    COLOR2 = "\033[96m"  # bright cyan
+    RESET = "\033[0m"
 
     def __init__(self):
         self._load()
@@ -52,10 +53,16 @@ class MarkManager:
 
     def remove(self, index: str) -> None:
         try:
-            self._dirs.pop(int(index))
-            self._save()
-        except (IndexError, ValueError) as e:
-            raise ValueError(f"Invalid index: {index}") from e
+            idx = int(index)
+        except ValueError as e:
+            raise ValueError(f"Index must be an integer: {index}") from e
+
+        try:
+            self._dirs.pop(idx)
+        except IndexError as e:
+            raise ValueError(f"Index out of range: {index}") from e
+
+        self._save()
 
     def get(self, index: str) -> str:
         if index is None and self._dirs:
@@ -68,7 +75,10 @@ class MarkManager:
 
     def print_dirs(self) -> None:
         for index, directory in enumerate(self):
-            print(f"{COLOR1 if index % 2 else COLOR2}" f"{index}\t{directory}{RESET}")
+            print(
+                f"{COLOR1 if index % 2 else COLOR2}"
+                f"{index}\t{directory}{RESET}"
+            )
 
     def clear(self) -> None:
         try:
@@ -81,14 +91,6 @@ class MarkManager:
 
 
 def main():
-    USAGE = """
-Usage:
-  mark add [DIR]       Add current or specified directory
-  mark list            Show bookmarks
-  mark go <NUM>        Print path to change directory to
-  mark remove <NUM>    Remove bookmark by number
-  mark clear           Delete all bookmarks
-"""
     mark = MarkManager()
 
     cmd = sys.argv[1] if len(sys.argv) > 1 else "list"
@@ -116,8 +118,6 @@ Usage:
     if cmd == "clear":
         mark.clear()
         return
-
-    print(USAGE)
 
 
 if __name__ == "__main__":
