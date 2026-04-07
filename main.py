@@ -9,7 +9,7 @@
 
 import sys
 
-from mark import MarkManager
+from mark_manager import MarkManager
 
 
 def main():
