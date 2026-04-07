@@ -8,7 +8,6 @@
 """
 
 import json
-import sys
 from pathlib import Path
 from typing import Iterator
 
@@ -57,6 +56,7 @@ class MarkManager:
             raise ValueError(f"Index must be an integer: {index}") from e
 
         try:
+            print(f"Removed {self._dirs[idx]}")
             self._dirs.pop(idx)
         except IndexError:
             print(f"Index out of range: {index}")
@@ -77,7 +77,7 @@ class MarkManager:
         for index, directory in enumerate(self):
             print(
                 f"{self.COLOR1 if index % 2 else self.COLOR2}"
-                f"{index}\t{directory}{self.RESET}"
+                f"{' ' * 4}{index}{' ' * 4}{directory}{self.RESET}"
             )
 
     def clear(self) -> None:
