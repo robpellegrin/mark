@@ -7,39 +7,28 @@
 
 """
 
-import sys
-
+from cli import process_cli_args
 from mark_manager import MarkManager
 
 
-def main():
+def main() -> None:
     mark = MarkManager()
 
-    cmd = sys.argv[1] if len(sys.argv) > 1 else "list"
-    arg = sys.argv[2] if len(sys.argv) > 2 else None
+    args = process_cli_args()
 
-    if cmd == "add":
-        mark.add(arg or str(Path.cwd()))
-        return
+    if args.add:
+        mark.add(args.add)
 
-    if cmd == "list":
-        mark.print_dirs()
-        return
-
-    if cmd == "go":
-        dir_to_go = mark.get(index=arg)
-
-        if dir_to_go:
+    if args.go_to is not None:
+        if dir_to_go := mark.get(args.go_to):
             print(dir_to_go)
-        return
+            return
 
-    if cmd == "remove":
-        mark.remove(arg)
-        return
+    if args.remove is not None:
+        mark.remove(args.remove)
 
-    if cmd == "clear":
-        mark.clear()
-        return
+    if args.list:
+        mark.print_dirs()
 
 
 if __name__ == "__main__":
