@@ -76,8 +76,8 @@ class MarkManager:
     def print_dirs(self) -> None:
         for index, directory in enumerate(self):
             print(
-                f"{COLOR1 if index % 2 else COLOR2}"
-                f"{index}\t{directory}{RESET}"
+                f"{self.COLOR1 if index % 2 else self.COLOR2}"
+                f"{index}\t{directory}{self.RESET}"
             )
 
     def clear(self) -> None:
@@ -88,37 +88,3 @@ class MarkManager:
 
     def __iter__(self) -> Iterator[str]:
         return iter(self._dirs)
-
-
-def main():
-    mark = MarkManager()
-
-    cmd = sys.argv[1] if len(sys.argv) > 1 else "list"
-    arg = sys.argv[2] if len(sys.argv) > 2 else None
-
-    if cmd == "add":
-        mark.add(arg or str(Path.cwd()))
-        return
-
-    if cmd == "list":
-        mark.print_dirs()
-        return
-
-    if cmd == "go":
-        dir_to_go = mark.get(index=arg)
-
-        if dir_to_go:
-            print(dir_to_go)
-        return
-
-    if cmd == "remove":
-        mark.remove(arg)
-        return
-
-    if cmd == "clear":
-        mark.clear()
-        return
-
-
-if __name__ == "__main__":
-    main()
